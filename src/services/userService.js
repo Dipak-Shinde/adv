@@ -443,7 +443,26 @@ export async function changePasswordService(userId, currentPassword, newPassword
   };
 }
 
-export async function refreshSessionTokenService(refreshToken) {
-  const r = await UserModel.refreshSessionToken(refreshToken);
-  return r.rows[0];
+export async function refreshSessionTokenService(refreshToken, userAgent, ip) {
+
+  const r = await UserModel.refreshSessionToken(
+    refreshToken,
+    userAgent,
+    ip
+  );
+
+  const d = r.rows[0]?.refresh_session_token;
+
+  if (!d?.success) {
+    return {
+      success: false,
+      message: "Token refresh failed"
+    };
+  }
+
+  return {
+    success: true,
+    token: d.token,
+    session_token: d.session_token
+  };
 }

@@ -1,5 +1,5 @@
 import * as UserService from "../services/userService.js";
-import { registerUserService } from "../services/userService.js";
+
 
 
 
@@ -21,7 +21,7 @@ export const registerUser = async (req, res) => {
       });
     }
 
-    const result = await registerUserService({
+   const result = await UserService.registerUserService({
       barregno,
       full_name,
       email,
@@ -35,8 +35,12 @@ export const registerUser = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
-  }
+  console.error(error);
+  return res.status(500).json({
+    success: false,
+    message: "Internal server error"
+  });
+}
 };
 
 /* VERIFY OTP – AUTO DETECT PURPOSE */
