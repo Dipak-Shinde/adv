@@ -6,7 +6,7 @@ import profileRoutes from "./src/routes/profileRoutes.js";
 import sidemenuRoutes from "./src/routes/sidemenuRoutes.js";
 import clientRoutes from './src/routes/clientRoutes.js';
 import { errorHandler } from './src/middlewares/errorHandler.js';
-
+import caseRoutes from "./src/routes/caseRoutes.js";
 
 import path from "path";
 import cors from "cors";
@@ -47,6 +47,7 @@ app.use(
 
 /* ================= MIDDLEWARE ================= */
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 
 /* ================= ROUTES ================= */
@@ -62,10 +63,17 @@ app.get("/api/hello", (req, res) => {
   res.json({ message: "Hello from Backend" });
 });
 
+
 /* SIDEMENU ROUTES */
+
+
 app.use("/api/sidemenu", sidemenuRoutes);
 
 app.use('/api/clients', clientRoutes);
+
+app.use("/api/cases", caseRoutes);
+
+
 
 // Error handler middleware
 app.use(errorHandler);
