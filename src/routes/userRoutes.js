@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  //registerUser,
+  registerUser,
   verifyEmailOtp,
   resendEmailOtp,
   loginUser,
@@ -9,8 +9,7 @@ import {
   refreshSessionToken,
   logoutSession,
   changePassword,
-  registerUser
-  
+    
 } from "../controllers/userController.js";
 
 import { authMiddleware } from "../middlewares/authMiddleware.js";

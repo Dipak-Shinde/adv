@@ -29,7 +29,7 @@ app.use(
         "http://localhost:5174",
         "http://localhost:5173",
         "http://localhost:5000",
-        "http://192.168.1.44:5173",
+        "http://192.168.1.54:5173",
         process.env.CLIENT_URL,
       ].filter(Boolean);
 

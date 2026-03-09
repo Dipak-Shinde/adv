@@ -1,20 +1,7 @@
 import * as UserService from "../services/userService.js";
 import { registerUserService } from "../services/userService.js";
 
-/* REGISTER */
-// export async function registerUser(req, res) {
-//   const { password, confirmPassword } = req.body;
 
-//   if (!password || password !== confirmPassword) {
-//     return res.status(400).json({
-//       success: false,
-//       message: "Passwords does not match please check"
-//     });
-//   }
-
-//   const result = await UserService.registerUserService(req.body);
-//   res.json(result);
-// }
 
 export const registerUser = async (req, res) => {
   try {

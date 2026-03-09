@@ -134,137 +134,6 @@ function adminRegistrationTemplate(data) {
 }
 
 
-/* ============================================================
- * REGISTER USER
- * ============================================================
- */
-// export async function registerUserService(data) {
-
-//   // HASH PASSWORD
-//   const hashedPassword = await bcrypt.hash(data.password, SALT_ROUNDS);
-
-//   const r = await UserModel.registerUser({
-//     ...data,
-//     password: hashedPassword
-//   });
-
-//   const d = r.rows[0]?.early_register_user;
-
-//   if (!d?.success) return d;
-
-//   if (d.otp) {
-
-//     // OTP email to user
-//     await sendEmail(
-//       data.email,
-//       "Your OTP Code",
-//       otpEmailTemplate({ otp: d.otp })
-//     );
-
-//     // Admin notification email
-//     await sendEmail(
-//       "dipakanilshinde2002@gmail.com",
-//       "New Early Bird Registration",
-//       adminRegistrationTemplate(data)
-//     );
-//   }
-
-//   return {
-//     success: true,
-//     registration_id: d.registration_id,
-//     message: "Verification OTP has been sent to your email address."
-//   };
-// }
-
-// export const registerUserService = async ({
-//   barregno,
-//   full_name,
-//   email,
-//   phone_no,
-//   password
-// }) => {
-
-//   const hashedPassword = await bcrypt.hash(password, 12);
-
-//   const query = `
-//     SELECT early_register_user($1,$2,$3,$4,$5)
-//   `;
-
-//   const values = [
-//     barregno,
-//     full_name,
-//     email,
-//     phone_no,
-//     hashedPassword
-//   ];
-
-//   const result = await pool.query(query, values);
-
-//   return result.rows[0];
-// };
-
-
-// export const registerUserService = async ({
-//   barregno,
-//   full_name,
-//   email,
-//   phone_no,
-//   password
-// }) => {
-
-//   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-
-//   const query = `
-//     SELECT * FROM early_register_user($1,$2,$3,$4,$5)
-//   `;
-
-//   const values = [
-//     barregno,
-//     full_name,
-//     email,
-//     phone_no,
-//     hashedPassword
-//   ];
-
-//   const result = await pool.query(query, values);
-
-// const data = result.rows[0]?.early_register_user;
-// const user = data?.early_register_user;
-
-//   console.log("REGISTER DB RESULT:", data);
-
-//   if (!data?.success) {
-//     return data;
-//   }
-
-//   /* SEND OTP EMAIL */
-//   if (data.otp) {
-
-//     await sendEmail(
-//       email,
-//       "Your OTP Code",
-//       otpEmailTemplate({ otp: data.otp })
-//     );
-
-//     /* ADMIN EMAIL */
-//     await sendEmail(
-//       "dipakanilshinde2002@gmail.com",
-//       "New Early Bird Registration",
-//       adminRegistrationTemplate({
-//         barregno,
-//         full_name,
-//         email,
-//         phone: phone_no
-//       })
-//     );
-//   }
-
-//   return {
-//     success: true,
-//     registration_id: data.registration_id,
-//     message: "Verification OTP sent to your email"
-//   };
-// };
 
 export const registerUserService = async ({
   barregno,
@@ -356,58 +225,7 @@ export async function verifyEmailOtpService(email, otp) {
 }
 
 
-/* ================= LOGIN USER ================= */
-// export async function loginUserService(data) {
-//   const r = await UserModel.loginUser(data.email);
-//   const u = r.rows[0]?.login_user;
 
-//   if (!u?.success) {
-//     return { success: false, message: "Invalid credentials" };
-//   }
-
-//   if (!process.env.JWT_SECRET) {
-//     throw new Error("JWT_SECRET not configured");
-//   }
-
-//   const isMatch = await bcrypt.compare(
-//     data.password,
-//     u.password_hash
-//   );
-
-//   if (!isMatch) {
-//     return {
-//       success: false,
-//       message: "Invalid login credentials."
-//     };
-//   }
-
-//   const token = jwt.sign(
-//     {
-//       sub: u.user_id,
-//       email: u.email
-//     },
-//     process.env.JWT_SECRET,
-//     { expiresIn: "30d" }
-//   );
-
-//   const sessionToken = crypto.randomBytes(32).toString("hex");
-
-//   await UserModel.createUserSession(
-//     u.user_id,
-//     sessionToken,
-//     data.userAgent || null,
-//     data.ipAddress || null,
-//     data.deviceName || null,
-//     data.deviceFingerprint || null
-//   );
-
-//   return {
-//     success: true,
-//     token,
-//     session_token: sessionToken,
-//     user_id: u.user_id,
-//   };
-// }
 
 export async function loginUserService(data) {
 
@@ -623,4 +441,9 @@ export async function changePasswordService(userId, currentPassword, newPassword
     success: true,
     message: "Password changed successfully"
   };
+}
+
+export async function refreshSessionTokenService(refreshToken) {
+  const r = await UserModel.refreshSessionToken(refreshToken);
+  return r.rows[0];
 }

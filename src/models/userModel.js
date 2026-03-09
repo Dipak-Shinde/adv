@@ -28,9 +28,7 @@ export function resendEmailOtp(email) {
   );
 }
 
-//* LOGIN */
-// export const loginUser = (login) =>
-//   pool.query("SELECT * FROM login_user($1)", [login]);
+
 export const loginUser = (login) =>
   pool.query(
     "SELECT login_user($1)",
