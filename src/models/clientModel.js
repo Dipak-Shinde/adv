@@ -128,7 +128,7 @@ export const deleteClient = async (client_id, updated_by) => {
 // export const createAddress = async (data) => {
 //   const result = await pool.query(
 //     `INSERT INTO address
-//     (client_id, user_id, addressline1, addressline2, city, state, country, pincode, created_by)
+//     (client_id, user_id, addressline1, addressline2, city_id, state_id, country_id, pincode, created_by)
 //     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
 //     RETURNING *`,
 //     [
@@ -136,9 +136,9 @@ export const deleteClient = async (client_id, updated_by) => {
 //       data.user_id,
 //       data.addressline1,
 //       data.addressline2,
-//       data.city,
-//       data.state,
-//       data.country,
+//       data.city_id,
+//       data.state_id,
+//       data.country_id,
 //       data.pincode,
 //       data.created_by
 //     ]
@@ -148,20 +148,30 @@ export const deleteClient = async (client_id, updated_by) => {
 // };
 
 export const createAddress = async (data) => {
+
+  // get city name from cities table
+  const cityResult = await pool.query(
+    `SELECT city_name FROM cities WHERE city_id = $1`,
+    [data.city_id]
+  );
+
+  const cityName = cityResult.rows[0]?.city_name || null;
+
   const result = await pool.query(
     `INSERT INTO address
-    (client_id, user_id, addressline1, addressline2, city_id, state_id, country_id, pincode, created_by)
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+    (client_id, user_id, addressline1, addressline2, pincode, city, city_id, state_id, country_id, created_by)
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
     RETURNING *`,
     [
       data.client_id,
       data.user_id,
       data.addressline1,
       data.addressline2,
+      data.pincode,
+      cityName,       // 👈 store city name
       data.city_id,
       data.state_id,
       data.country_id,
-      data.pincode,
       data.created_by
     ]
   );
