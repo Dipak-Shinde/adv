@@ -8,9 +8,8 @@ export const addClientService = async (data) => {
   return await clientModel.addClient(data);
 };
 
-export const getClientsService = async (user_id) => {
-  return await clientModel.getClients(user_id);
-};
+export const getClientsService = (user_id) =>
+  clientModel.getClients(user_id);
 
 export const getClientFullDetailsService = async (client_id) => {
   return await clientModel.getClientFullDetails(client_id);

@@ -11,23 +11,97 @@ export const addClient = async (data) => {
 };
 
 export const getClients = async (user_id) => {
+
   const result = await pool.query(
-    `SELECT fn_get_all_clients($1) AS clients`,
+    `
+    SELECT 
+        c.client_id,
+        c.firstname,
+        c.lastname,
+        c.email,
+        c.phoneno,
+        c.gender,
+
+        a.addressline1,
+        a.addressline2,
+        a.pincode,
+
+        ct.city_name AS city,
+        s.state_name AS state,
+        co.country_name AS country
+
+    FROM clients c
+
+    LEFT JOIN address a
+    ON c.client_id = a.client_id
+
+    LEFT JOIN cities ct
+    ON a.city_id = ct.city_id
+
+    LEFT JOIN states s
+    ON a.state_id = s.state_id
+
+    LEFT JOIN countries co
+    ON a.country_id = co.country_id
+
+    WHERE c.user_id = $1
+
+    ORDER BY c.client_id DESC
+    `,
     [user_id]
   );
 
-  return result.rows[0].clients;
+  return result.rows;
 };
 
 export const getClientFullDetails = async (client_id) => {
+
   const result = await pool.query(
-    `SELECT get_client_full_details($1) AS client_details`,
+    `
+    SELECT 
+        c.client_id,
+        c.firstname,
+        c.lastname,
+        c.email,
+        c.phoneno,
+        c.dateofbirth,
+        c.gender,
+
+        a.address_id,
+        a.addressline1,
+        a.addressline2,
+        a.pincode,
+
+        ct.city_id,
+        ct.city_name,
+
+        s.state_id,
+        s.state_name,
+
+        co.country_id,
+        co.country_name
+
+    FROM clients c
+
+    LEFT JOIN address a
+    ON c.client_id = a.client_id
+
+    LEFT JOIN cities ct
+    ON a.city_id = ct.city_id
+
+    LEFT JOIN states s
+    ON a.state_id = s.state_id
+
+    LEFT JOIN countries co
+    ON a.country_id = co.country_id
+
+    WHERE c.client_id = $1
+    `,
     [client_id]
   );
 
-  return result.rows[0].client_details;
+  return result.rows[0];
 };
-
 
 export const updateClient = async (client_id, data) => {
   const result = await pool.query(
@@ -51,10 +125,32 @@ export const deleteClient = async (client_id, updated_by) => {
 
 //-------------------------------------------Address
 
+// export const createAddress = async (data) => {
+//   const result = await pool.query(
+//     `INSERT INTO address
+//     (client_id, user_id, addressline1, addressline2, city, state, country, pincode, created_by)
+//     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+//     RETURNING *`,
+//     [
+//       data.client_id,
+//       data.user_id,
+//       data.addressline1,
+//       data.addressline2,
+//       data.city,
+//       data.state,
+//       data.country,
+//       data.pincode,
+//       data.created_by
+//     ]
+//   );
+
+//   return result.rows[0];
+// };
+
 export const createAddress = async (data) => {
   const result = await pool.query(
     `INSERT INTO address
-    (client_id, user_id, addressline1, addressline2, city, state, country, pincode, created_by)
+    (client_id, user_id, addressline1, addressline2, city_id, state_id, country_id, pincode, created_by)
     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
     RETURNING *`,
     [
@@ -62,9 +158,9 @@ export const createAddress = async (data) => {
       data.user_id,
       data.addressline1,
       data.addressline2,
-      data.city,
-      data.state,
-      data.country,
+      data.city_id,
+      data.state_id,
+      data.country_id,
       data.pincode,
       data.created_by
     ]
@@ -96,15 +192,42 @@ export const getAddressById = async (id) => {
 
 
 // Get Address By Client ID
+// export const getAddressByClientId = async (client_id) => {
+//   const result = await pool.query(
+//     `SELECT * FROM address WHERE client_id=$1`,
+//     [client_id]
+//   );
+
+//   return result.rows;
+// };
 export const getAddressByClientId = async (client_id) => {
   const result = await pool.query(
-    `SELECT * FROM address WHERE client_id=$1`,
+    `SELECT 
+        a.address_id,
+        a.addressline1,
+        a.addressline2,
+        a.pincode,
+
+        c.city_id,
+        c.city_name,
+
+        s.state_id,
+        s.state_name,
+
+        co.country_id,
+        co.country_name
+
+     FROM address a
+     LEFT JOIN cities c ON a.city_id = c.city_id
+     LEFT JOIN states s ON a.state_id = s.state_id
+     LEFT JOIN countries co ON a.country_id = co.country_id
+
+     WHERE a.client_id=$1`,
     [client_id]
   );
 
   return result.rows;
 };
-
 
 // Update Address
 export const updateAddress = async (id, data) => {
