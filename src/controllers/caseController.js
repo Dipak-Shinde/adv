@@ -2,21 +2,6 @@ import * as caseService from "../services/caseService.js";
 
 
 /* ================= ADD CASE ================= */
-// export const AddCase = async (req, res, next) => {
-//   try {
-//     console.log("Request Body:", req.body);
-
-//     const result = await caseService.addCaseService(req.body);
-
-//     res.status(201).json({
-//       success: true,
-//       data: result
-//     });
-
-//   } catch (err) {
-//     next(err);
-//   }
-// };
 
 export const AddCase = async (req, res, next) => {
   try {
