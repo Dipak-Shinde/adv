@@ -110,6 +110,42 @@ Request Body: Add Client
   "pincode": "411001"
 }
 
+
+# --------------Case API Endpoints
+
+| API Name              | Method | Full Endpoint                                                                             | ID Used   | Description                       |
+| --------------------- | ------ | ----------------------------------------------------------------------------------------- | --------- | --------------------------------- |
+| Add Case              | POST   | `http://localhost:8000/api/cases/add-case`                                                | —         | Create a new case                 |
+| Case List             | GET    | `http://localhost:8000/api/cases/case-list?user_id=6&page=1&page_size=10`                 | `user_id` | Get all cases for a specific user |
+| Case List with Search | GET    | `http://localhost:8000/api/cases/case-list?user_id=6&search=Property&page=1&page_size=10` | `user_id` | Search cases                      |
+| View Case Details     | GET    | `http://localhost:8000/api/cases/view-case/1`                                             | `case_id` | View details of a specific case   |
+| Update Case           | PUT    | `http://localhost:8000/api/cases/edit-case/1`                                             | `case_id` | Update a case                     |
+| Delete Case           | DELETE | `http://localhost:8000/api/cases/delete-case/1`                                           | `case_id` | Delete a case                     |
+
+Request Body: Add Case
+{
+  "user_id": 6,
+  "client_id": 33,
+  "case_title": "Property ",
+  "casetype": "Civil2",
+  "case_description": "Land ownership dispute between two parties",
+  "court_name": "District Court",
+  "court_location": "Pune",
+  "case_startdate": "2026-03-09",
+  "case_enddate": "2026-08-15",
+  "adverse_party_names": "Rahul Sharma",
+  "adverse_party_phones": "9876543210",
+  "adverse_party_emails": "rahul@example.com",
+  "adverse_party_address": "Mumbai, Maharashtra",
+  "adverse_party_advocate_names": "Adv. Amit Patil",
+  "adverse_party_advocate_phones": "9999999999",
+  "adverse_party_advocate_emails": "amit@law.com",
+  "is_active": true,
+  "created_by": 1,
+  "updated_by": null
+}
+
+
 git add .
 
 git commit -m okokk
