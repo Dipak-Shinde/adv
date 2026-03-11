@@ -10,16 +10,11 @@ import caseRoutes from "./src/routes/caseRoutes.js";
 
 import path from "path";
 import cors from "cors";
-// const cors = require("cors");
+
 
 const app = express();
 
-// app.use((req, res, next) => {
-//   console.log("🔥 Incoming:", req.method, req.url);
-//   next();
-// });
 
-// app.use(cors()); // allow frontend access
 
 /* ================= CORS ================= */
 app.use(
@@ -64,7 +59,7 @@ app.get("/api/hello", (req, res) => {
 });
 
 
-/* SIDEMENU ROUTES */
+/* All ROUTES */
 
 
 app.use("/api/sidemenu", sidemenuRoutes);
@@ -89,14 +84,9 @@ app.get("/", (req, res) => {
 console.log("JWT_SECRET loaded:", !!process.env.JWT_SECRET);
 
 
-
 /* ================= SERVER START ================= */
 const PORT = process.env.PORT || 5000;
 const HOST = "0.0.0.0";
-
-// app.listen(PORT, () => {
-//   console.log(`🚀 Server running on http://localhost:${PORT}`);
-// });
 
 app.listen(PORT, HOST, () => {
   console.log(`🚀 Server running on http://${HOST}:${PORT}`);
