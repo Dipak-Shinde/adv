@@ -191,9 +191,44 @@ GET /api/case-notes/3
 DELETE /api/case-notes/delete/3
 
 
+# ------------------Hearings API Endpoints
+
+| Method | Endpoint                                  | Description                       |
+| ------ | ----------------------------------------- | --------------------------------- |
+| POST   | `/api/hearings/create`                    | Create a new hearing              |
+| GET    | `/api/hearings/all/:user_id`              | Get all hearings for a user       |
+| GET    | `/api/hearings/:hearing_id`               | Get hearing details by ID         |
+| PUT    | `/api/hearings/update`                    | Update a hearing                  |
+| DELETE | `/api/hearings/delete/:hearing_id`        | Delete a hearing (soft delete)    |
+| GET    | `/api/hearings/clients-dropdown/:user_id` | Get clients dropdown for hearings |
+| GET    | `/api/hearings/case-types`                | Get all active case types         |
 
 
+Request Body: -Hearings API 
 
+{
+  "user_id": 6,
+  "clientname": "Rahul Sharma",
+  "casetype": "Civil Case",
+  "hearingdate": "2026-04-15",
+  "hearingtime": "10:30:00",
+  "courtdetails": "Pune District Court",
+  "note": "Initial hearing for civil dispute",
+  "created_by": 1
+}
+
+Update Hearing
+
+{
+  "hearing_id": 5,
+  "clientname": "Rahul Sharma",
+  "casetype": "Civil Case",
+  "hearingdate": "2026-04-18",
+  "hearingtime": "11:00:00",
+  "courtdetails": "Pune District Court - Room 2",
+  "note": "Rescheduled hearing",
+  "updated_by": 1
+}
 
 
 

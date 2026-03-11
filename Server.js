@@ -8,6 +8,8 @@ import clientRoutes from './src/routes/clientRoutes.js';
 import { errorHandler } from './src/middlewares/errorHandler.js';
 import caseRoutes from "./src/routes/caseRoutes.js";
 import caseNoteRoutes from "./src/routes/caseNoteRoutes.js";
+import hearingRoutes from "./src/routes/hearingRoutes.js";
+
 
 import path from "path";
 import cors from "cors";
@@ -70,6 +72,8 @@ app.use('/api/clients', clientRoutes);
 app.use("/api/cases", caseRoutes);
 
 app.use("/api/case-notes", caseNoteRoutes);
+
+app.use("/api/hearings", hearingRoutes);
 
 
 // Error handler middleware
