@@ -147,6 +147,56 @@ Request Body: Add Case
   "updated_by": null
 }
 
+# --------------------Case Notes APIs
+
+| Method | Endpoint                           | Description                   | Request Body / Params |
+| ------ | ---------------------------------- | ----------------------------- | --------------------- |
+| POST   | `/api/case-notes/create`           | Create new case note          | Body                  |
+| GET    | `/api/case-notes/all/:user_id`     | Get all case notes for a user | `user_id` (params)    |
+| GET    | `/api/case-notes/clients/:user_id` | Get clients dropdown for user | `user_id` (params)    |
+| GET    | `/api/case-notes/cases/:client_id` | Get cases by client           | `client_id` (params)  |
+| GET    | `/api/case-notes/:note_id`         | Get case note by ID           | `note_id` (params)    |
+| PUT    | `/api/case-notes/update`           | Update case note              | Body                  |
+| DELETE | `/api/case-notes/delete/:note_id`  | Delete case note              | `note_id` (params)    |
+
+Request Body: Create new case note  
+
+{
+  "user_id": 6,
+  "client_id": 47,
+  "case_id": 23,
+  "note_title": "Court Hearing",
+  "note_description": "Client attended hearing",
+  "followup_date": "2026-04-10",
+  "created_by": 1
+}
+
+
+Update 
+
+{
+  "note_id": 3,
+  "note_title": "Court Hearing Updated",
+  "note_description": "Client attended hearing and submitted documents",
+  "followup_date": "2026-04-15",
+  "updated_by": 1
+}
+
+Example GET Requests
+
+GET /api/case-notes/all/6
+GET /api/case-notes/clients/6
+GET /api/case-notes/cases/47
+GET /api/case-notes/3
+DELETE /api/case-notes/delete/3
+
+
+
+
+
+
+
+
 
 git add .
 

@@ -7,7 +7,7 @@ export const AddCase = async (req, res, next) => {
   try {
 
   
-
+    console.log("BODY RECEIVED:", req.body);
     const result = await caseService.addCaseService(req.body);
 
     res.status(201).json({
@@ -47,7 +47,7 @@ export const CaseList = async (req, res, next) => {
 /* ================= CASE DETAILS ================= */
 export const ViewCaseDetails = async (req, res, next) => {
   try {
-
+ console.log("CASE ID:", req.params.id);
     const result = await caseService.getCaseDetailsService(req.params.id);
 
     res.json({
