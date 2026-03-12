@@ -7,7 +7,7 @@ export const AddCase = async (req, res, next) => {
   try {
 
   
-    console.log("BODY RECEIVED:", req.body);
+  
     const result = await caseService.addCaseService(req.body);
 
     res.status(201).json({

@@ -10,6 +10,7 @@ import caseRoutes from "./src/routes/caseRoutes.js";
 import caseNoteRoutes from "./src/routes/caseNoteRoutes.js";
 import hearingRoutes from "./src/routes/hearingRoutes.js";
 import appointmentRoutes from "./src/routes/appointmentRoutes.js";
+import calenderRoutes from "./src/routes/calenderRoutes.js";
 
 import path from "path";
 import cors from "cors";
@@ -76,6 +77,9 @@ app.use("/api/case-notes", caseNoteRoutes);
 app.use("/api/hearings", hearingRoutes);
 
 app.use("/api/appointments", appointmentRoutes);
+
+
+app.use("/api/calender", calenderRoutes);
 
 // Error handler middleware
 app.use(errorHandler);
