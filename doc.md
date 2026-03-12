@@ -231,6 +231,53 @@ Update Hearing
 }
 
 
+# -------------------Document APIs
+
+| Method | API Endpoint                               | Purpose            |
+| ------ | ------------------------------------------ | ------------------ |
+| POST   | `/api/documents/create`                    | Upload document    |
+| GET    | `/api/documents/all/:user_id`              | Get all documents  |
+| GET    | `/api/documents/:document_id`              | Get document by id |
+| PUT    | `/api/documents/update`                    | Update document    |
+| DELETE | `/api/documents/delete/:document_id`       | Delete document    |
+| GET    | `/api/documents/clients-dropdown/:user_id` | Client dropdown    |
+| GET    | `/api/documents/cases-dropdown/:client_id` | Case dropdown      |
+
+
+
+request body :create
+
+{
+  "user_id": 1,
+  "client_id": 2,
+  "case_id": 3,
+  "document_title": "Property Agreement",
+  "document_note": "Important legal document",
+  "document_url": "uploads/property.pdf",
+  "created_by": 1
+}
+
+
+
+update
+
+{
+  "document_id": 5,
+  "document_title": "Updated Agreement",
+  "document_note": "Updated copy",
+  "document_url": "uploads/newfile.pdf",
+  "updated_by": 1
+}
+
+
+
+
+
+
+
+
+
+
 
 
 git add .
