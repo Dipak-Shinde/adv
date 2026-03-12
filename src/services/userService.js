@@ -19,7 +19,7 @@ const SALT_ROUNDS = 12;
 function otpEmailTemplate({ otp }) {
   const year = new Date().getFullYear();
 
- return `
+  return `
 <!DOCTYPE html>
 <html>
 <head>
@@ -227,9 +227,78 @@ export async function verifyEmailOtpService(email, otp) {
 
 
 
-export async function loginUserService(data) {
+// export async function loginUserService(data) {
 
-  const r = await UserModel.loginUser(data.login);
+//   const r = await UserModel.loginUser(data.login);
+
+//   // get json returned from postgres
+//   let u = r.rows[0]?.login_user;
+
+//   // if postgres returns string JSON
+//   if (typeof u === "string") {
+//     u = JSON.parse(u);
+//   }
+
+//   console.log("DB LOGIN RESULT:", u);
+
+//   if (!u || !u.success) {
+//     return { success: false, message: "Invalid credentials" };
+//   }
+
+//   const isMatch = await bcrypt.compare(
+//     data.password,
+//     u.password_hash
+//   );
+
+//   if (!isMatch) {
+//     return {
+//       success: false,
+//       message: "Invalid login credentials"
+//     };
+//   }
+
+//   const token = jwt.sign(
+//     {
+//       sub: u.user_id,
+//       email: u.email
+//     },
+//     process.env.JWT_SECRET,
+//     { expiresIn: "30d" }
+//   );
+
+//   const sessionToken = crypto.randomBytes(32).toString("hex");
+
+//   await UserModel.createUserSession(
+//     u.user_id,
+//     sessionToken,
+//     data.userAgent || null,
+//     data.ipAddress || null,
+//     data.deviceName || null,
+//     data.deviceFingerprint || null
+//   );
+
+//   return {
+//     success: true,
+//     token,
+//     session_token: sessionToken,
+//     user_id: u.user_id
+//   };
+// }
+
+export async function loginUserService(data) {
+  // Support both 'login' and 'email' as the field name
+  const loginInput = data.login || data.email;
+
+  if (!loginInput) {
+    return { success: false, message: "Email is required" };
+  }
+
+  if (!data.password) {
+    return { success: false, message: "Password is required" };
+  }
+
+  console.log(":mag: Searching for user by:", loginInput);
+  const r = await UserModel.loginUser(loginInput);
 
   // get json returned from postgres
   let u = r.rows[0]?.login_user;
@@ -239,31 +308,43 @@ export async function loginUserService(data) {
     u = JSON.parse(u);
   }
 
-  console.log("DB LOGIN RESULT:", u);
+  console.log(":hammer_and_wrench: DB LOGIN RESULT:", u);
 
+  // Use a secure message that doesn't reveal if user exists or not
   if (!u || !u.success) {
-    return { success: false, message: "Invalid credentials" };
+    return { success: false, message: "Invalid email or password" };
   }
 
-  const isMatch = await bcrypt.compare(
-    data.password,
-    u.password_hash
-  );
+  // Ensure password_hash is present
+  if (!u.password_hash) {
+    console.error(":x: PANIC: DB returned success but no password_hash!");
+    return {
+      success: false,
+      message: "Authentication failed. Please contact support.",
+    };
+  }
+
+  const isMatch = await bcrypt.compare(data.password, u.password_hash);
 
   if (!isMatch) {
     return {
       success: false,
-      message: "Invalid login credentials"
+      message: "Invalid login credentials",
     };
+  }
+
+  if (!process.env.JWT_SECRET) {
+    console.error(":x: PANIC: JWT_SECRET environment variable is missing!");
+    throw new Error("Server configuration error");
   }
 
   const token = jwt.sign(
     {
       sub: u.user_id,
-      email: u.email
+      email: u.email,
     },
     process.env.JWT_SECRET,
-    { expiresIn: "30d" }
+    { expiresIn: "30d" },
   );
 
   const sessionToken = crypto.randomBytes(32).toString("hex");
@@ -274,14 +355,15 @@ export async function loginUserService(data) {
     data.userAgent || null,
     data.ipAddress || null,
     data.deviceName || null,
-    data.deviceFingerprint || null
+    data.deviceFingerprint || null,
   );
 
   return {
     success: true,
     token,
     session_token: sessionToken,
-    user_id: u.user_id
+    user_id: u.user_id,
+    message: "Login successful",
   };
 }
 

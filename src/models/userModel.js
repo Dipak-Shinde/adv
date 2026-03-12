@@ -5,15 +5,15 @@ export const registerUser = (d) =>
   pool.query(
     "SELECT * FROM  early_register_user($1,$2,$3,$4,$5)",
     [
-     d.barregno,
+      d.barregno,
       d.full_name,
       d.email,
-     d.phone_no,
+      d.phone_no,
       d.password
     ]
   );
 
-  //verify email otp for registration
+//verify email otp for registration
 export const verifyEmailOtpByEmail = (email, otp) =>
   pool.query(
     "SELECT * FROM verify_email_otp_by_email($1,$2)",
@@ -27,6 +27,7 @@ export function resendEmailOtp(email) {
     [email]
   );
 }
+
 
 
 export const loginUser = (login) =>

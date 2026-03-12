@@ -24,6 +24,7 @@ router.post("/verify-email-otp", verifyEmailOtp);
 router.post("/resend-otp", resendEmailOtp);
 
 /* AUTH */
+
 router.post("/login", loginUser);
 
 /* PASSWORD RESET */

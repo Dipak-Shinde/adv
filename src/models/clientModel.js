@@ -3,12 +3,14 @@ import {pool} from '../config/db.js';
 
 export const addClient = async (data) => {
   const result = await pool.query(
-    `SELECT insert_client_details($1) AS client_id`,
-    [data]
-  );
+  `SELECT insert_client_details($1::json) AS client_id`,  // cast to JSON
+  [JSON.stringify(data)]                                  // stringify JS object
+);
 
   return result.rows[0];
 };
+
+
 
 export const getClients = async (user_id) => {
 

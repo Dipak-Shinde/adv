@@ -21,7 +21,7 @@ export const registerUser = async (req, res) => {
       });
     }
 
-   const result = await UserService.registerUserService({
+    const result = await UserService.registerUserService({
       barregno,
       full_name,
       email,
@@ -35,12 +35,12 @@ export const registerUser = async (req, res) => {
     });
 
   } catch (error) {
-  console.error(error);
-  return res.status(500).json({
-    success: false,
-    message: "Internal server error"
-  });
-}
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
 };
 
 /* VERIFY OTP – AUTO DETECT PURPOSE */
@@ -63,44 +63,55 @@ export async function resendEmailOtp(req, res) {
   res.json(await UserService.resendEmailOtpService(req.body.email));
 }
 
-/* LOGIN */
+
+
+
 // export async function loginUser(req, res) {
- 
-//     const result = await UserService.loginUserService({
+
+//   console.log("LOGIN API HIT");
+//   console.log("REQUEST BODY:", req.body);
+
+//   const result = await UserService.loginUserService({
 //     ...req.body,
 //     userAgent: req.headers["user-agent"],
 //     ipAddress: req.ip,
 //   });
 
-//   console.log("LOGIN RESULT:", result); // 👈 ADD THIS
+//   console.log("LOGIN RESULT:", result);
 
 //   res.json(result);
 // }
 
 
 export async function loginUser(req, res) {
+  try {
+    console.log("--------------------------------------------------");
+    console.log(":rocket: LOGIN ATTEMPT:", new Date().toISOString());
+    console.log(":envelope_with_arrow: REQUEST BODY:", req.body);
 
-  console.log("LOGIN API HIT");
-  console.log("REQUEST BODY:", req.body);
+    const result = await UserService.loginUserService({
+      ...req.body,
+      userAgent: req.headers["user-agent"],
+      ipAddress: req.ip,
+    });
 
-  const result = await UserService.loginUserService({
-    ...req.body,
-    userAgent: req.headers["user-agent"],
-    ipAddress: req.ip,
-  });
+    console.log(":white_check_mark: LOGIN RESULT:", result);
 
-  console.log("LOGIN RESULT:", result);
+    if (!result.success) {
 
-  res.json(result);
+      return res.status(401).json(result);
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(":x: LOGIN CONTROLLER ERROR:", error);
+    res.status(500).json({
+      success: false,
+      message: "An internal server error occurred during login",
+    });
+  }
 }
 
-/* FORGOT PASSWORD */
-// export async function forgotPassword(req, res) {
-//   res.json(await UserService.forgotPasswordService(req.body.email));
-// }
-/* ================= FORGOT PASSWORD ================= */
-
-/* FORGOT PASSWORD */
 export async function forgotPassword(req, res) {
 
   const { email } = req.body;
